@@ -36,18 +36,6 @@ export async function deploy(thisObject: any, contracts: any) {
   }
 }
 
-export async function createSLP(thisObject: any, name: any, tokenA: any, tokenB: any, amount: any) {
-  const createPairTx = await thisObject.factory.createPair(tokenA.address, tokenB.address)
-
-  const _pair = (await createPairTx.wait()).events[0].args.pair
-
-  thisObject[name] = await thisObject.PegasysPair.attach(_pair)
-
-  await tokenA.transfer(thisObject[name].address, amount)
-  await tokenB.transfer(thisObject[name].address, amount)
-
-  await thisObject[name].mint(thisObject.alice.address)
-}
 // Defaults to e18 using amount * 10^18
 export function getBigNumber(amount: any, decimals = 18) {
   return BigNumber.from(amount).mul(BigNumber.from(BASE_TEN).pow(decimals))
